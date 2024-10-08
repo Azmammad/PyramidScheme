@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pyramid Scheme Simulator</title>
+    <style>
+
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #FFDEE9, #B5FFFC);
+            color: #333;
+        }
+
+        header {
+            background-color: #4B79A1;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+        }
+
+        main {
+            padding: 20px;
+        }
+
+        .user-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .user-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 250px;
+            transition: transform 0.3s ease;
+        }
+
+        .user-card:hover {
+            transform: scale(1.05);
+        }
+
+        .user-card h3 {
+            margin: 0 0 10px;
+            color: #4B79A1;
+        }
+
+        .user-card p {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #333;
+            color: white;
+            position: relative;
+        }
+
+    </style>
+</head>
+<body>
+<header>
+    <h1>Pyramid Scheme Simulator</h1>
+    <nav>
+        <ul>
+            <li><a href="#users">Kullanıcılar</a></li>
+            <li><a href="#add-user">Kullanıcı Ekle</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+    <section id="users">
+        <h2>Kullanıcı Listesi</h2>
+        <div class="user-list" id="user-list">
+            <!-- Kullanıcı kartları buraya dinamik olarak eklenecek -->
+        </div>
+    </section>
+
+    <section id="add-user">
+        <h2>Kullanıcı Ekle</h2>
+        <form id="user-form">
+            <input type="text" name="name" placeholder="Ad" required>
+            <input type="number" name="investment" placeholder="Yatırım Miktarı" required>
+            <input type="number" name="sponsorId" placeholder="Sponsor ID" min="0">
+            <button type="submit">Ekle</button>
+        </form>
+    </section>
+</main>
+
+<footer>
+    <p>&copy; 2024 Pyramid Scheme Simulator. Tüm Hakları Saklıdır.</p>
+</footer>
+
+<script>
+    let users = [];
+
+    document.getElementById('user-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const formData = new FormData(event.target);
+        const name = formData.get('name');
+        const investment = parseFloat(formData.get('investment'));
+        const sponsorId = parseInt(formData.get('sponsorId')) || null;
+
+        const user = {
+            id: users.length + 1,
+            name,
+            investment,
+            earnings: 0,
+            sponsorId,
+            bonus: 0
+        };
+
+        users.push(user);
+
+        if (sponsorId && users[sponsorId - 1]) {
+            const sponsor = users[sponsorId - 1];
+            sponsor.bonus += calculateBonus(investment);
+        }
+
+        renderUsers();
+        event.target.reset();
+    });
+
+    function calculateBonus(investment) {
+        return investment * 0.1;
+    }
+
+    function renderUsers() {
+        const userList = document.getElementById('user-list');
+        userList.innerHTML = '';
+
+        users.forEach(user => {
+            const userCard = document.createElement('div');
+            userCard.className = 'user-card';
+            userCard.innerHTML = `
+            <h3>${user.name}</h3>
+            <p><strong>Yatırım:</strong> ${user.investment.toFixed(2)} TL</p>
+            <p><strong>Kazanç:</strong> ${user.earnings.toFixed(2)} TL</p>
+            <p><strong>Bonus:</strong> ${user.bonus.toFixed(2)} TL</p>
+            <p><strong>Sponsor ID:</strong> ${user.sponsorId || 'Yok'}</p>
+        `;
+            userList.appendChild(userCard);
+        });
+    }
+
+</script>
+</body>
+</html>

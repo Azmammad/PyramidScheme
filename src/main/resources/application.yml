@@ -1,0 +1,22 @@
+spring:
+  application:
+    name:PyramidScheme
+  datasource:
+    url: jdbc:mysql://localhost/pyramid_scheme
+    username: root
+    password: password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    open-in-view: false
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+springdoc.api-docs.enabled: false
+springdoc.swagger-ui.enabled: false
